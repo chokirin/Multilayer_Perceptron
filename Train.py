@@ -12,7 +12,8 @@ recall, F1), and a metrics history saved to a JSON file (see compare.py).
 This file also holds the network and helpers, which predict.py imports.
 """
 import argparse
- 
+import json
+
 import numpy as np
  
 EPS = 1e-15
@@ -198,7 +199,7 @@ LOSSES = {
 def plot_curves(hist):
     import matplotlib
     import matplotlib.pyplot as plt
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4))
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 4))
     ax1.plot(hist["loss"], label="training loss")
     ax1.plot(hist["val_loss"], label="validation loss")
     ax1.set(title="Loss", xlabel="epoch", ylabel="loss")
@@ -254,10 +255,11 @@ def main():
     sizes = [x_t.shape[1]] + args.layer + [2]
     net = MLP(sizes, args.activation, args.init, args.seed)
     loss_fn = LOSSES[args.loss]
+    optimizer = Optimizer(args.optimizer, args.learning_rate)
     rng = np.random.default_rng(args.seed)
 
     keys = ["loss", "val_loss", "acc", "val_acc", "val_precision", "val_recall", "val_f1"]
-    hist = {"k: [] for k in keys}
+    hist = {k: [] for k in keys}
     best, wait, best_weights = np.inf, 0, None
     for epoch in range(1, args.epochs + 1):
         order = rng.permutation(len(x_t))
@@ -265,12 +267,13 @@ def main():
             idx = order[s:s + args.batch_size]
             acts = net.forward(x_t[idx])
             dW, db = net.backward(acts, y_t[idx])
-            net.step(dW, db, args.learning_rate)
+            net.step(dW, db, optimizer)
  
         p_t, p_v = net.predict_proba(x_t), net.predict_proba(x_v)
         hist["loss"].append(loss_fn(p_t, y_t))
         hist["val_loss"].append(loss_fn(p_v, y_v))
         hist["acc"].append(accuracy(p_t, y_t))
+        mv = classification_metrics(p_v, y_v)
         hist["val_acc"].append(mv["accuracy"])
         hist["val_precision"].append(mv["precision"])
         hist["val_recall"].append(mv["recall"])
@@ -299,9 +302,10 @@ def main():
 
     
     name = args.name or f"{args.optimizer} {'-'.join(map(str, args.layer))} lr={args.learning_rate}"
-    with open(args.history, "w") as f:
-        json.dump({"name": name, "args": vars(args), "history": hist}, f, indent=2)
-    print(f"> metrics history saved to {args.history}")
+    if args.history is not None:
+        with open(args.history, "w") as f:
+            json.dump({"name": name, "args": vars(args), "history": hist}, f, indent=2)
+        print(f"> metrics history saved to {args.history}")
     plot_curves(hist)
  
  

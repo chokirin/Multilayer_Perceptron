@@ -7,7 +7,8 @@ import argparse
  
 import numpy as np
  
-from train import MLP, accuracy, binary_crossentropy, one_hot, read_csv
+from Train import (MLP, accuracy, binary_crossentropy, classification_metrics,
+                   one_hot, read_csv)
  
  
 def main():
@@ -37,4 +38,3 @@ def main():
  
 if __name__ == "__main__":
     main()
-
