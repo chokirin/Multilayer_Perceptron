@@ -94,12 +94,14 @@ python3 Train.py \
   --batch_size 16 \
   --learning_rate 0.005 \
   --activation relu \
-  --init heUniform \
   --loss categoricalCrossentropy \
   --patience 10 \
   --seed 42 \
   --save saved_model.npy
-```
+
+Usage:
+    python train.py --layer 24 24 --epochs 70 --batch_size 8 --learning_rate 0.01
+    python train.py --optimizer adam --learning_rate 0.001 --patience 10 --name adam
 
 Training standardizes features using statistics calculated from the training
 set only. It prints training and validation loss/accuracy for each epoch and

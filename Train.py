@@ -1,15 +1,8 @@
 #!/usr/bin/env python3
 """Train a multilayer perceptron from scratch (NumPy only).
- 
-Usage:
-    python train.py --layer 24 24 --epochs 70 --batch_size 8 --learning_rate 0.01
-    python train.py --optimizer adam --learning_rate 0.001 --patience 10 --name adam
- 
 Bonus features: optimizers (sgd, momentum, nesterov, rmsprop, adam), early
 stopping with best-weights restore, several metrics (accuracy, precision,
 recall, F1), and a metrics history saved to a JSON file (see compare.py).
- 
-This file also holds the network and helpers, which predict.py imports.
 """
 import argparse
 import json
@@ -35,13 +28,13 @@ def read_csv(path):
  
  
 def one_hot(labels):
-    """B -> [1, 0], M -> [0, 1]"""
+    """Convert labels to one-hot encoding. B -> [1, 0], M -> [0, 1]"""
     y = np.zeros((len(labels), 2))
     y[labels == "B", 0] = 1
     y[labels == "M", 1] = 1
     return y
- 
- 
+
+
 # --------------------------------------------------------------------------- #
 # Network
 # --------------------------------------------------------------------------- #

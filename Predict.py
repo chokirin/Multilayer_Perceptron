@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 """Load a saved model, predict on a dataset and evaluate with binary cross-entropy.
- 
-Usage: python predict.py --model saved_model.npy --dataset data_validation.csv
 """
 import argparse
  
