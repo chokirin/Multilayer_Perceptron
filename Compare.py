@@ -2,11 +2,11 @@
 #!/usr/bin/env python3
 """Bonus: display the learning curves of several runs on the same graph.
  
-Each run of train.py saves a history file (--history). Compare them with:
+Each run of Train.py saves a history file (--history). Compare them with:
  
-    python train.py --optimizer sgd  --history sgd.json  --name sgd
-    python train.py --optimizer adam --history adam.json --name adam
-    python compare.py sgd.json adam.json
+    python3 Train.py --optimizer sgd  --history sgd.json  --name sgd
+    python3 Train.py --optimizer adam --history adam.json --name adam
+    python3 Compare.py sgd.json adam.json
 """
 import argparse
 import json

@@ -21,6 +21,21 @@ Install the Python dependencies with:
 python3 -m pip install numpy matplotlib
 ```
 
+The included `Makefile` provides shortcuts for the main workflow:
+
+```bash
+make split
+make train
+make predict
+```
+
+Run `make help` to list all targets. The dataset and output paths can be
+overridden, for example:
+
+```bash
+make train DATASET=other.csv MODEL=model.npy
+```
+
 ## Project files
 
 | File | Purpose |
